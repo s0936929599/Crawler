@@ -1,4 +1,4 @@
-nstall.packages("tidyr") #rbind packages
+Install.packages("tidyr") #rbind packages
 library(gtools)
 library(tidyr)
 getwd()
