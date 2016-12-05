@@ -1,10 +1,10 @@
 library(stringr)
 setwd("C:/Users/BDC/Desktop/")
 getwd()
-setwd("C:/Users/BDC/Desktop/etc data1")
+setwd("C:/Users/BDC/Desktop/etc data2")
 setwd("D:/etc")
-m04a=list.files(path="C:/Users/BDC/Desktop/etc data1/m04A",pattern="*",full.names = T)
-m05a=list.files(path="C:/Users/BDC/Desktop/etc data1/m05A",pattern="*",full.names = T)
+m04a=list.files(path="C:/Users/BDC/Desktop/etc data2/m04A",pattern="*",full.names = T)
+m05a=list.files(path="C:/Users/BDC/Desktop/etc data2/m05A",pattern="*",full.names = T)
 a=list()
 b=list()
 c=list()
@@ -25,7 +25,7 @@ tmprt = function(rtcsv){
 tmprt1 = function(rtcsv){
   read.csv( rtcsv,header = TRUE,stringsAsFactors = FALSE)
 }
-for (i in 292:364) #從2015/8/17開始 #3/26每分鐘的跳過
+for (i in 69:161) #從2015/8/17開始 #3/26每分鐘的跳過
 {
   a[[i]]=list.files(path=m04a[i],full.names = T)#看04A一天內的小時
   b[[i]]=list.files(path=m05a[i],full.names = T)#看05A一天內的小時
@@ -57,40 +57,42 @@ for (i in 292:364) #從2015/8/17開始 #3/26每分鐘的跳過
   
   ab[[i]]=do.call(rbind,ii) #五個變一個的資料rbind
   names(ab[[i]])[1:3]=c("TimeInterval","GantryFrom","GantryTo")
-  names(ab[[i]])[4:length(ab[[i]][1,])]=c("VehicleType","TravelTime","Traffic","SpaceMeanSpeed")#第一列命名
+  names(ab[[i]])[4:length(ab[[i]][1,])]=c("VehicleType","TravelTime","Traffic",round((ab[[i]][j,5]*ab[[i]][j,6]+ab[[i]][j,9]*ab[[i]][j,10]+ab[[i]][j,13]*ab[[i]][j,14]+ab[[i]][j,17]*ab[[i]][j,18]+ab[[i]][j,21]*ab[[i]][j,22])/(ab[[i]][j,6]+ab[[i]][j,10]+ab[[i]][j,14]+ab[[i]][j,18]+ab[[i]][j,22])))#第一列命名
   #偵測站間的旅行時間
   for(j in 1:length(ab[[i]][,1])){
     trat= round((ab[[i]][j,5]*ab[[i]][j,6]+ab[[i]][j,9]*ab[[i]][j,10]+ab[[i]][j,13]*ab[[i]][j,14]+ab[[i]][j,17]*ab[[i]][j,18]+ab[[i]][j,21]*ab[[i]][j,22])/(ab[[i]][j,6]+ab[[i]][j,10]+ab[[i]][j,14]+ab[[i]][j,18]+ab[[i]][j,22]))
     ab[[i]][j,24] =trat
     ab[[i]][j,25]=(ab[[i]][j,6]+ab[[i]][j,10]+ab[[i]][j,14]+ab[[i]][j,18]+ab[[i]][j,22])
+    ab[[i]][j,26]=round((ab[[i]][j,7]*ab[[i]][j,6]+ab[[i]][j,11]*ab[[i]][j,10]+ab[[i]][j,15]*ab[[i]][j,14]+ab[[i]][j,19]*ab[[i]][j,18]+ab[[i]][j,23]*ab[[i]][j,22])/(ab[[i]][j,6]+ab[[i]][j,10]+ab[[i]][j,14]+ab[[i]][j,18]+ab[[i]][j,22]))
     cat(j,"\n")
   }
   tra[[i]]=ab[[i]][,-c(4:23)]
-  names(tra[[i]])[4:5]=c("Travel Time","Traffic")
-  setwd("D:/etc")
+  names(tra[[i]])[4:6]=c("Travel Time","Traffic","SpaceMeanspeed")
+  setwd("D:/614etc")
   write.csv(tra[[i]],file =paste(f,".csv",sep=""))
   cat("第",i,"筆完成\n") 
 }
 #北到南的表
 
 bb=list()
-m0405a=list.files(path="D:/etc",pattern="*")#算出旅行時間資料夾
-setwd("D:/etc")
+m0405a=list.files(path="D:/614etc",pattern="*")#算出旅行時間資料夾
+setwd("D:/614etc")
 bb=lapply(m0405a,tmprt1) 
 ff=str_extract_all(m0405a,"201[0-9]+")
 km=read.csv("km.csv",stringsAsFactors=FALSE)#2015.6.8
-km1=read.csv("2015.10.1.csv",stringsAsFactors=FALSE)#2015.10.1
-km2=read.csv("2015.11.20.csv",stringsAsFactors=FALSE)
+km=read.csv("1.csv",stringsAsFactors=FALSE)#original
+
 
 #處理NA
 
- for (i in 1:48)
-   {
-     bb[[i]][,5][is.na(bb[[i]][,5])]=0
-    setwd("D:/naetc")
-    write.csv(bb[[i]],file =paste(ff[i],".csv",sep=""))
-    cat(i,"\n") 
-   }
+for (i in 1:47)
+{
+  bb[[i]][,5][is.na(bb[[i]][,5])]=0
+  bb[[i]][,7][is.na(bb[[i]][,7])]=0
+  setwd("D:/na614etc")
+  write.csv(bb[[i]],file =paste(ff[i],".csv",sep=""))
+  cat(i,"\n") 
+}
 
 
 
@@ -102,8 +104,8 @@ ntos=function(x)
 for (p in 1:69)
 {
   cat(p,"\n")
-  t = subset(x,x$GantryFrom==km[p,1])
-  tt[[p]]=subset(t,t$GantryTo==km[p+1,1])
+  t = subset(x,x$GantryFrom==km1[p,1])
+  tt[[p]]=subset(t,t$GantryTo==km1[p+1,1])
   if(p>1)
   {
     tt[[p]]=tt[[p]][,-c(1,2)]
@@ -112,12 +114,12 @@ for (p in 1:69)
   {
     tt[[p]]=tt[[p]][,-1]
   }
-  setwd("D:/etcntos")
+  setwd("D:/614ntos")
   write.csv(tt,file=paste(ff[i],".csv",sep=""))
 }
 }  
 
-for (i in 1:30) 
+for (i in 1:5) 
 {
   
   ntos(bb[[i]])
@@ -126,8 +128,8 @@ for (i in 1:30)
 
 #北到南交流道
 bbb=list()
-ntoss=list.files(path="D:/etcntos",pattern="*")
-setwd("D:/etcntos")
+ntoss=list.files(path="D:/614ntos",pattern="*")
+setwd("D:/614ntos")
 bbb=lapply(ntoss,tmprt1) 
 fff=str_extract_all(ntoss,"201[0-9]+")
 
@@ -142,7 +144,7 @@ ntosend=function(y)
     k=2 
     kk=list()
     g=1 #存進LIST
-    for (i in seq(3,length(y),by=4)) #基隆到八堵,八堵到大華系統   
+    for (i in seq(3,length(y),by=5)) #基隆到八堵,八堵到大華系統   
     {         #第一段   
       if(g==1) #基隆端到基隆例外處理
       {
@@ -159,12 +161,12 @@ ntosend=function(y)
                          as.numeric(str_extract(str_extract(y[j,i],"F[0-9]+"),"[0-9]+"))/10)*y[j,i+2]+
                       #第二段
                       (km[k,5]-as.numeric(str_extract(str_extract(km[k,1],"F[0-9]+"),"[0-9]+"))/10)/
-                      (as.numeric(str_extract(str_extract(y[j,i+5],"F[0-9]+"),"[0-9]+"))/10-
-                         as.numeric(str_extract(str_extract(y[j,i+4],"F[0-9]+"),"[0-9]+"))/10)*y[j,i+6])
+                      (as.numeric(str_extract(str_extract(y[j,i+6],"F[0-9]+"),"[0-9]+"))/10-
+                         as.numeric(str_extract(str_extract(y[j,i+5],"F[0-9]+"),"[0-9]+"))/10)*y[j,i+7])
       
       k=k+1 
       
-      kk[[71]]=round(y[j,277]*(370.05-368.044))
+      kk[[71]]=round(y[j,277]*(370.05-368.044)) # 高雄端例外處理
     }
     
     gg=do.call(cbind,kk)
@@ -191,18 +193,15 @@ ntosend=function(y)
                               "鼎金系統-高雄(九如路)","高雄(九如路)-高雄(中正路)","高雄(三多路)-瑞隆路(南下出口匝道)"
                               
   )
-  setwd("D:/etcntosend")
+  setwd("D:/614ntosend")
   write.csv(aaa,file=paste(fff[f],".csv",sep=""))
 } 
 
 
-for (f in 1:30) 
+for (f in 1:5) 
 {
   ntosend(bbb[[f]])
 } 
-
-
-
 
 bbbb=list()
 ntosmodel=list.files(path="D:/etcntosend",pattern="*")
@@ -215,58 +214,58 @@ ffff=str_extract_all(ntosmodel,"201[0-9]+")
 #預測哪天
 prefun=function(x)
 {
-pdm=data.frame()
-
-for(j in 2:71)
-{  
-  for (i in 1:288) 
-  {
-    pdm[i,1]=bbbb[[x]][i,2]
-    if(i==1)
-    {  
-      pdm[i,j]=round((bbbb[[3]][288,j+1]+bbbb[[3]][287,j+1]+bbbb[[3]][286,j+1]+bbbb[[3]][285,j+1]+bbbb[[3]][284,j+1])/5*0.2)+
-        round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)
-    }
-    if(i==2)
+  pdm=data.frame()
+  
+  for(j in 2:71)
+  {  
+    for (i in 1:288) 
     {
-      pdm[i,j]=round((pdm[i-1,j]+bbbb[[3]][288,j+1]+bbbb[[3]][287,j+1]+bbbb[[3]][286,j+1]+bbbb[[3]][285,j+1])/5*0.2)+
-        
-        round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)
-    } 
-    if(i==3)
-    {
-      pdm[i,j]=round((pdm[i-1,j]+pdm[i-2,j]+bbbb[[3]][288,j+1]+bbbb[[3]][287,j+1]+bbbb[[3]][286,j+1])/5*0.2)+
-        round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)
+      pdm[i,1]=bbbb[[x]][i,2]
+      if(i==1)
+      {  
+        pdm[i,j]=round((bbbb[[x-1]][288,j+1]+bbbb[[x-1]][287,j+1]+bbbb[[x-1]][286,j+1]+bbbb[[x-1]][285,j+1]+bbbb[[x-1]][284,j+1])/5*0.2)+
+          round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)
+      }
+      if(i==2)
+      {
+        pdm[i,j]=round((pdm[i-1,j]+bbbb[[x-1]][288,j+1]+bbbb[[x-1]][287,j+1]+bbbb[[x-1]][286,j+1]+bbbb[[x-1]][285,j+1])/5*0.2)+
+          
+          round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)
+      } 
+      if(i==3)
+      {
+        pdm[i,j]=round((pdm[i-1,j]+pdm[i-2,j]+bbbb[[x-1]][288,j+1]+bbbb[[x-1]][287,j+1]+bbbb[[x-1]][286,j+1])/5*0.2)+
+          round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)
+      }
+      if(i==4)
+      {
+        pdm[i,j]=round((pdm[i-1,j]+pdm[i-2,j]+pdm[i-3,j]+bbbb[[x-1]][288,j+1]+bbbb[[x-1]][287,j+1])/5*0.2)+
+          round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)
+      }
+      if(i==5)
+      {
+        pdm[i,j]=round((pdm[i-1,j]+pdm[i-2,j]+pdm[i-3,j]+pdm[i-4,j]+bbbb[[x-1]][288,j+1])/5*0.2)+
+          round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)   
+      }
+      if(i>=6)
+      {
+        pdm[i,j]=round((pdm[i-1,j]+pdm[i-2,j]+pdm[i-3,j]+pdm[i-4,j]+pdm[i-5,j])/5*0.2)+
+          round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)
+      }
     }
-    if(i==4)
-    {
-      pdm[i,j]=round((pdm[i-1,j]+pdm[i-2,j]+pdm[i-3,j]+bbbb[[3]][288,j+1]+bbbb[[3]][287,j+1])/5*0.2)+
-        round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)
-    }
-    if(i==5)
-    {
-      pdm[i,j]=round((pdm[i-1,j]+pdm[i-2,j]+pdm[i-3,j]+pdm[i-4,j]+bbbb[[3]][288,j+1])/5*0.2)+
-        round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)   
-    }
-    if(i>=6)
-    {
-      pdm[i,j]=round((pdm[i-1,j]+pdm[i-2,j]+pdm[i-3,j]+pdm[i-4,j]+pdm[i-5,j])/5*0.2)+
-        round((bbbb[[x-1]][i,j+1]+bbbb[[x-2]][i,j+1]+bbbb[[x-3]][i,j+1])/3*0.8)
-    }
-  }
-} 
-names(pdm)[1:length(pdm)]=c("時間","基隆端-基隆","基隆-八堵","八堵-大華系統","大華系統-五堵","五堵-汐止","汐止系統-東湖","東湖-內湖","內湖-圓山",
-                            "圓山-台北","台北-三重","三重-五股","五股-高公局","高公局-林口(文化一路)","林口(文化一路)-林口(文化北路)","林口(文化北路)-桃園",
-                            "桃園-機場系統","機場系統-中壢服務區","中壢服務區-內壢","內壢-中壢","中壢-平鎮系統","平鎮系統-幼獅","幼獅-楊梅","楊梅-湖口","湖口-竹北",
-                            "竹北-新竹(公道五路)","新竹(公道五路)-新竹(園區二路)","新竹(園區二路)-新竹系統","新竹系統-頭份","頭份-頭屋","頭屋-苗栗","苗栗-銅鑼","銅鑼-三義",
-                            "三義-后里","后里-台中系統","台中系統-豐原","豐原-大雅","大雅-台中","台中-南屯","南屯-王田","王田-彰化系統","彰化系統-彰化","彰化-埔鹽系統","埔鹽系統-員林",
-                            "員林-北斗","北斗-西螺","西螺-虎尾","虎尾-斗南","斗南-雲林系統","雲林系統-大林","大林-民雄","民雄-嘉義","嘉義-水上","水上-嘉義系統","嘉義系統-新營","新營-下營系統",
-                            "下營系統-麻豆","麻豆-安定","安定-台南系統","台南系統-永康","永康-台南","台南-仁德系統","仁德系統-路竹","路竹-高科","高科-岡山","岡山-楠梓(旗楠路)","楠梓(旗楠路)-楠梓(鳳楠路)","楠梓(鳳楠路)-鼎金系統",
-                            "鼎金系統-高雄(九如路)","高雄(九如路)-高雄(中正路)","高雄(三多路)-瑞隆路(南下出口匝道)")
+  } 
+  names(pdm)[1:length(pdm)]=c("時間","基隆端-基隆","基隆-八堵","八堵-大華系統","大華系統-五堵","五堵-汐止","汐止系統-東湖","東湖-內湖","內湖-圓山",
+                              "圓山-台北","台北-三重","三重-五股","五股-高公局","高公局-林口(文化一路)","林口(文化一路)-林口(文化北路)","林口(文化北路)-桃園",
+                              "桃園-機場系統","機場系統-中壢服務區","中壢服務區-內壢","內壢-中壢","中壢-平鎮系統","平鎮系統-幼獅","幼獅-楊梅","楊梅-湖口","湖口-竹北",
+                              "竹北-新竹(公道五路)","新竹(公道五路)-新竹(園區二路)","新竹(園區二路)-新竹系統","新竹系統-頭份","頭份-頭屋","頭屋-苗栗","苗栗-銅鑼","銅鑼-三義",
+                              "三義-后里","后里-台中系統","台中系統-豐原","豐原-大雅","大雅-台中","台中-南屯","南屯-王田","王田-彰化系統","彰化系統-彰化","彰化-埔鹽系統","埔鹽系統-員林",
+                              "員林-北斗","北斗-西螺","西螺-虎尾","虎尾-斗南","斗南-雲林系統","雲林系統-大林","大林-民雄","民雄-嘉義","嘉義-水上","水上-嘉義系統","嘉義系統-新營","新營-下營系統",
+                              "下營系統-麻豆","麻豆-安定","安定-台南系統","台南系統-永康","永康-台南","台南-仁德系統","仁德系統-路竹","路竹-高科","高科-岡山","岡山-楠梓(旗楠路)","楠梓(旗楠路)-楠梓(鳳楠路)","楠梓(鳳楠路)-鼎金系統",
+                              "鼎金系統-高雄(九如路)","高雄(九如路)-高雄(中正路)","高雄(三多路)-瑞隆路(南下出口匝道)")
   setwd("C:/Users/BDC/Desktop/")
   write.csv(pdm,file=paste(ffff[x],".csv",sep=""))   
 }
 
-for (i in 4:9) {
+for (i in 7) {
   prefun(i)
 }
