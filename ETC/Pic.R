@@ -1,21 +1,74 @@
 x=1:288
-par(mfrow=c(2,2))
-plot(x,bbb[[1]][,6],main="01F005S-01F0017s偵測站",xaxt="n",xlab="6/14(Tue) ",ylab="數值",type="l",col="dark green",lwd=2)
+par(mfrow=c(1,1))
+plot(x,bbb[[1]][,6],main="01F005S-01F0017s偵測站",xaxt="n",xlab="",ylab="數值",type="l",col="dark green",lwd=2)
 axis(1,at=seq(1,288,12),las=3,
      labels = c("00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00"
                ,"12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"))
 lines(bbb[[1]][,7],type="l",col="dark orange",lwd=2)
 
 legend("topright",c("交通量(輛)","平均速度(km/h)"), lty = c(1,1),lwd=c(2,2),
-       col=c('dark green',"dark orange"),bty="n")
+       col=c('dark green',"dark orange"))
 
 
-
-plot(x,bbb[[2]][,6],main="01F005S-01F0017s偵測站",xaxt="n",xlab="6/14(Tue) ",ylab="數值",type="l",col="dark green",lwd=2)
+#615
+plot(x,bbb[[2]][,6],main="01F005S-01F0017s偵測站",xaxt="n",xlab="",ylab="數值",type="l",col="dark green",lwd=2)
 axis(1,at=seq(1,288,12),las=3,
      labels = c("00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00"
                 ,"12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"))
 lines(bbb[[2]][,7],type="l",col="dark orange",lwd=2)
 
 legend("topright",c("交通量(輛)","平均速度(km/h)"), lty = c(1,1),lwd=c(2,2),
-       col=c('dark green',"dark orange"),bty="n")
+       col=c('dark green',"dark orange"))
+
+#616
+plot(x,bbb[[3]][,6],main="01F005S-01F0017s偵測站",xaxt="n",xlab="",ylab="數值",type="l",col="dark green",lwd=2)
+axis(1,at=seq(1,288,12),las=3,
+     labels = c("00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00"
+                ,"12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"))
+lines(bbb[[3]][,7],type="l",col="dark orange",lwd=2)
+
+legend("topright",c("交通量(輛)","平均速度(km/h)"), lty = c(1,1),lwd=c(2,2),
+       col=c('dark green',"dark orange"))
+
+#617
+plot(x,bbb[[4]][,6],main="01F005S-01F0017s偵測站",xaxt="n",xlab="",ylab="數值",type="l",col="dark green",lwd=2)
+axis(1,at=seq(1,288,12),las=3,
+     labels = c("00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00"
+                ,"12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"))
+lines(bbb[[4]][,7],type="l",col="dark orange",lwd=2)
+
+legend("topright",c("交通量(輛)","平均速度(km/h)"), lty = c(1,1),lwd=c(2,2),
+       col=c('dark green',"dark orange"))
+
+
+#618
+plot(x,bbb[[5]][,6],main="01F005S-01F0017s偵測站",xaxt="n",xlab="",ylab="數值",type="l",col="dark green",lwd=2)
+axis(1,at=seq(1,288,12),las=3,
+     labels = c("00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00"
+                ,"12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"))
+lines(bbb[[5]][,7],type="l",col="dark orange",lwd=2)
+
+legend("topright",c("交通量(輛)","平均速度(km/h)"), lty = c(1,1),lwd=c(2,2),
+       col=c('dark green',"dark orange"))
+
+
+#619
+plot(x,bbb[[6]][,6],main="01F005S-01F0017s偵測站",xaxt="n",xlab="",ylab="數值",type="l",col="dark green",lwd=2)
+axis(1,at=seq(1,288,12),las=3,
+     labels = c("00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00"
+                ,"12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"))
+lines(bbb[[6]][,7],type="l",col="dark orange",lwd=2)
+
+legend("topright",c("交通量(輛)","平均速度(km/h)"), lty = c(1,1),lwd=c(2,2),
+       col=c('dark green',"dark orange"))
+
+
+#620
+plot(x,bbb[[7]][,6],main="01F005S-01F0017s偵測站",xaxt="n",xlab="",ylab="數值",type="l",col="dark green",lwd=2)
+axis(1,at=seq(1,288,12),las=3,
+     labels = c("00:00","01:00","02:00","03:00","04:00","05:00","06:00","07:00","08:00","09:00","10:00","11:00"
+                ,"12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00","23:00"))
+lines(bbb[[7]][,7],type="l",col="dark orange",lwd=2)
+
+legend("topright",c("交通量(輛)","平均速度(km/h)"), lty = c(1,1),lwd=c(2,2),
+       col=c('dark green',"dark orange"))
